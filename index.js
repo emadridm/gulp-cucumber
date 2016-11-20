@@ -7,7 +7,7 @@ var Cucumber = require('cucumber');
 
 var clearFileCache = function(filePath) {
   delete require.cache[require.resolve(path.resolve(filePath))];
-}
+};
 
 module.exports = function(options) {
   var files = [];
@@ -51,12 +51,15 @@ module.exports = function(options) {
     runOptions.push(options.compiler);
   }
 
+  if (options['fail-fast']) {
+    runOptions.push('--fail-fast');
+  }
+
   if (options['snippet-syntax']) {
     runOptions.push('--snippet-syntax');
     runOptions.push(options['snippet-syntax']);
   }
-  
-  
+
   if (options.emitErrors === false) {
     emitErrors = false;
   }
@@ -69,7 +72,7 @@ module.exports = function(options) {
       return callback();
     }
     features.push(filename);
-    callback();
+    return callback();
   };
 
   var run = function() {
